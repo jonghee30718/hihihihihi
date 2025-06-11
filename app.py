@@ -2,54 +2,35 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 
-# 파일 불러오기
+# CSV 불러오기
 try:
     df = pd.read_csv("성취에_대한_만족도__19세_이상_인구__20250605123253.csv", encoding="utf-8-sig")
-except:
+except UnicodeDecodeError:
     df = pd.read_csv("성취에_대한_만족도__19세_이상_인구__20250605123253.csv", encoding="cp949")
 
-st.title("Satisfaction with Achievement")
+st.title("Satisfaction with Achievement - Visualization")
 
-# 기준 선택
-criteria_options = df["특성별(1)"].dropna().unique().tolist()
+# 기준 선택 (성별, 연령별, 교육수준 등)
+criteria_options = df["특성별(1)"].unique().tolist()
 selected_criteria = st.selectbox("Select category", criteria_options)
 
-# 만족도 관련 컬럼
-satisfaction_cols = [
-    "성취에 대한 만족도 - 매우 만족",
-    "성취에 대한 만족도 - 약간 만족",
-    "성취에 대한 만족도 - 보통",
-    "성취에 대한 만족도 - 약간 불만족",
-    "성취에 대한 만족도 - 약간 불만족",
-]
-satisfaction_labels = ["Very satisfied", "Somewhat satisfied", "Neutral", "Somewhat dissatisfied", "Very dissatisfied"]
-
-# 선택된 기준에 해당하는 행 필터링
+# 선택된 기준으로 필터링
 filtered_df = df[df["특성별(1)"] == selected_criteria]
 
-# 그래프 출력
+# 만족도 항목
+satisfaction_cols = ["2024.1", "2024.2", "2024.3", "2024.4", "2024.5"]
+satisfaction_labels = ["Very satisfied", "Somewhat satisfied", "Neutral", "Somewhat dissatisfied", "Very dissatisfied"]
+
 st.subheader(f"Satisfaction by {selected_criteria}")
 for index, row in filtered_df.iterrows():
     st.markdown(f"### {row['특성별(2)']}")
 
-    try:
-        values = [float(row[col]) for col in satisfaction_cols if pd.notna(row[col])]
-    except ValueError:
-        st.write("Invalid data found. Skipping...")
-        continue
+    values = [row[col] for col in satisfaction_cols]
 
-    if not values or len(values) < 5:
-        st.write("No data available for this category.")
-        continue
-
-    fig, ax = plt.subplots(figsize=(6, 3))
+    fig, ax = plt.subplots()
     ax.bar(satisfaction_labels, values, color="cornflowerblue")
-
-    ax.set_ylim(0, max(values) + 10)
-    ax.set_ylabel("Percentage (%)", fontsize=9)
-    ax.set_xlabel("Satisfaction Level", fontsize=9)
-    ax.set_title(f"{row['특성별(2)']} - Satisfaction", fontsize=10)
-    ax.tick_params(axis='x', labelrotation=30, labelsize=8)
-    ax.tick_params(axis='y', labelsize=8)
-
+    ax.set_ylim(0, 100)
+    ax.set_ylabel("Percentage (%)")
+    ax.set_xlabel("Satisfaction Level")
+    ax.set_title(f"{row['특성별(2)']} - Satisfaction")
     st.pyplot(fig)
