@@ -25,18 +25,25 @@ st.subheader(f"Satisfaction by {selected_criteria}")
 for index, row in filtered_df.iterrows():
     st.markdown(f"### {row['특성별(2)']}")
 
-    values = [row[col] for col in satisfaction_cols]
+    # 숫자 변환 및 NaN 등 예외 처리
+    values = []
+    for col in satisfaction_cols:
+        try:
+            val = float(row[col])
+        except (ValueError, TypeError):
+            val = 0
+        values.append(val)
 
     fig, ax = plt.subplots()
     ax.bar(satisfaction_labels, values, color="cornflowerblue")
-    
+
     # x축 폰트 크기 조절
-    ax.tick_params(axis='x', labelsize=9)  # 숫자를 조절해서 크기 변경 가능
-    
-    # y축 범위 좁히기 (최소는 0, 최대는 값의 최대값보다 조금 크게)
+    ax.tick_params(axis='x', labelsize=9)
+
+    # y축 범위 조절 (최대값에 10 더해 여유)
     max_val = max(values)
-    ax.set_ylim(0, max_val + 10)  # 최대값에 10 더해서 적당히 여유 주기
-    
+    ax.set_ylim(0, max_val + 10)
+
     ax.set_ylabel("Percentage (%)")
     ax.set_xlabel("Satisfaction Level")
     ax.set_title(f"{row['특성별(2)']} - Satisfaction")
