@@ -16,11 +16,11 @@ selected_criteria = st.selectbox("Select category", criteria_options)
 
 # 만족도 관련 컬럼
 satisfaction_cols = [
-    "성취에 대한 만족도 - 매우 만족 (%)",
-    "성취에 대한 만족도 - 약간 만족 (%)",
-    "성취에 대한 만족도 - 보통 (%)",
-    "성취에 대한 만족도 - 약간 불만족 (%)",
-    "성취에 대한 만족도 - 약간 불만족 (%)",
+    "성취에 대한 만족도 - 매우 만족",
+    "성취에 대한 만족도 - 약간 만족",
+    "성취에 대한 만족도 - 보통",
+    "성취에 대한 만족도 - 약간 불만족",
+    "성취에 대한 만족도 - 약간 불만족",
 ]
 satisfaction_labels = ["Very satisfied", "Somewhat satisfied", "Neutral", "Somewhat dissatisfied", "Very dissatisfied"]
 
