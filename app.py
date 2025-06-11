@@ -38,7 +38,7 @@ for index, row in filtered_df.iterrows():
     ax.bar(satisfaction_labels, values, color="cornflowerblue")
 
     # x축 폰트 크기 조절
-    ax.tick_params(axis='x', labelsize=9)
+    ax.tick_params(axis='x', labelsize=7)
 
     # y축 범위 조절 (최대값에 10 더해 여유)
     max_val = max(values)
